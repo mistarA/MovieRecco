@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         if (resultCode == RESULT_OK && requestCode == GENRE_LIST_REQUEST_CODE && data != null){
             genreIds = data.getExtras().getString(GenreListActivity.INTENT_GENRE_IDS);
             mSubmitButton.setVisibility(View.VISIBLE);
-            Toast.makeText(this, genreIds, Toast.LENGTH_SHORT).show();
         }
 
     }
