@@ -31,8 +31,9 @@ public class MovieListPresenter extends Presenter {
         this.movieListView = iMovieListView;
     }
 
-    public void getMovieListFromGenres(String genres) {
-        compositeSubscription.add(movieDbApiInterface.getMovieDiscoverList(Constants.API_KEY, Constants.LANGUAGE, genres)
+    public void getMovieListFromGenres(String type, String genres, Integer page) {
+        compositeSubscription.add(movieDbApiInterface.getMovieDiscoverList(type, Constants.API_KEY, Constants.LANGUAGE, genres,
+                page, Constants.POPULARITY_DESC)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MovieResultsDiscover>() {

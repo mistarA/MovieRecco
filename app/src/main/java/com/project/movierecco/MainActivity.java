@@ -20,6 +20,7 @@ import com.project.movierecco.views.activity.GenreListActivity;
 import com.project.movierecco.views.activity.MovieListActivity;
 import com.project.mvp.presenters.MainActivityPresenter;
 import com.project.mvp.views.IMainActivityView;
+import com.project.utils.Constants;
 import com.project.utils.storage.SharedPreferencesManager;
 
 import java.util.ArrayList;
@@ -110,14 +111,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         mArrGenre = arrGenre;
     }
 
-    public void setGenreItemClicked(Genre genre) {
-        mGenreSelected.setText(genre.getName());
-
-    }
-
-    public void setTypeItemClicked(String s) {
-    }
-
 
     @OnClick (R.id.genre_ll)
     public void openGenreList() {
@@ -136,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
     @OnClick (R.id.button_movie)
     public void setMovieSelected() {
         isMovieSelected = true;
-        mMovieButton.setChecked(true);
         mTvSeriesButton.setChecked(false);
     }
 
@@ -144,12 +136,17 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
     public void setTvSeriesSelected() {
         isMovieSelected = false;
         mMovieButton.setChecked(false);
-        mTvSeriesButton.setChecked(true);
     }
     @OnClick (R.id.submit_button)
     public void submitGenresForDiscover() {
+        if (!mMovieButton.isChecked() && !mTvSeriesButton.isChecked()){
+            Toast.makeText(this,"Please select type", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(this, MovieListActivity.class);
         intent.putExtra(MovieListActivity.INTENT_GENRES_STRING, genreIds);
+        intent.putExtra(MovieListActivity.INTENT_DISCOVER_TYPE,
+                isMovieSelected ? Constants.DISCOVER_TYPE_MOVIE : Constants.DISCOVER_TYPE_TV );
         startActivity(intent);
     }
 

@@ -47,6 +47,10 @@ dependencies {
     //RecyclerView
     compile 'com.android.support:recyclerview-v7:24.2.1'
 
+    //Picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okio:okio:1.7.0'
     testCompile 'junit:junit:4.12'
