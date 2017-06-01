@@ -1,5 +1,10 @@
 package com.project.mvp.presenters;
 
+import com.project.utils.RxUtils;
+
+import rx.internal.util.RxJavaPluginUtils;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by anandmishra on 15/11/16.
  */
@@ -8,8 +13,14 @@ package com.project.mvp.presenters;
 
 public abstract class Presenter {
 
-    public abstract void start();
+    CompositeSubscription compositeSubscription;
 
-    public abstract void stop();
+    public void start() {
+        compositeSubscription = new CompositeSubscription();
+    }
+
+    public void stop() {
+        RxUtils.clear(compositeSubscription);
+    }
 
 }

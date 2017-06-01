@@ -1,5 +1,8 @@
 package com.project.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 @Generated ("org.jsonschema2pojo")
-public class ArrGenre {
+public class ArrGenre implements Parcelable {
 
     @SerializedName ("genres")
     @Expose
@@ -33,4 +36,32 @@ public class ArrGenre {
         this.genres = genres;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(this.genres);
+    }
+
+    public ArrGenre() {
+    }
+
+    protected ArrGenre(Parcel in) {
+        this.genres = in.createTypedArrayList(Genre.CREATOR);
+    }
+
+    public static final Parcelable.Creator<ArrGenre> CREATOR = new Parcelable.Creator<ArrGenre>() {
+        @Override
+        public ArrGenre createFromParcel(Parcel source) {
+            return new ArrGenre(source);
+        }
+
+        @Override
+        public ArrGenre[] newArray(int size) {
+            return new ArrGenre[size];
+        }
+    };
 }

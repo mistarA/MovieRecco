@@ -1,29 +1,26 @@
 package com.project.movierecco;
 
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.Spinner;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.models.ArrGenre;
 import com.project.models.Genre;
-import com.project.models.MovieResultsTopRated;
-import com.project.movierecco.adapters.GenreDetailsListAdapter;
-import com.project.movierecco.adapters.TypeListAdapter;
+import com.project.movierecco.views.activity.GenreListActivity;
+import com.project.movierecco.views.activity.MovieListActivity;
 import com.project.mvp.presenters.MainActivityPresenter;
 import com.project.mvp.views.IMainActivityView;
-import com.project.network.views.MovieDbApiInterface;
-import com.project.utils.Constants;
 import com.project.utils.storage.SharedPreferencesManager;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,19 +30,16 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
-public class MainActivity extends Activity implements IMainActivityView {
+public class MainActivity extends AppCompatActivity implements IMainActivityView {
 
 
+    private static final int GENRE_LIST_REQUEST_CODE = 111;
     ArrGenre mArrGenre;
     String[] mType;
-    private GenreDetailsListAdapter genreDetailsListAdapter;
-    private TypeListAdapter typeListAdapter;
     private List<String> typeList;
+    String genreIds;
+    private boolean isMovieSelected;
 
     @Inject
     SharedPreferencesManager sharedPreferencesManager;
@@ -53,51 +47,57 @@ public class MainActivity extends Activity implements IMainActivityView {
     @Inject
     MainActivityPresenter mainActivityPresenter;
 
-    @BindView (R.id.type_recycler_view)
-    RecyclerView mTypeRecyclerView;
-
-    @BindView (R.id.genre_recycler_view)
-    RecyclerView mGenreRecyclerView;
-
-    @BindView (R.id.type_hint_and_value_tv)
-    TextView mTypeSelected;
-
     @BindView (R.id.genre_hint_and_value_tv)
     TextView mGenreSelected;
 
+    @BindView (R.id.movie_collage)
+    ImageView mMainImage;
+
+    @BindView(R.id.button_movie)
+    RadioButton mMovieButton;
+
+    @BindView(R.id.button_tv_series)
+    RadioButton mTvSeriesButton;
+
+    @BindView (R.id.genre_ll)
+    LinearLayout mLL;
+
+    @BindView(R.id.submit_button)
+    Button mSubmitButton;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         initializeDependencyInjector();
         ButterKnife.bind(this);
         mainActivityPresenter.setMainActivityView(this);
+        mainActivityPresenter.start();
         mainActivityPresenter.getGenreListAndInflateDataToUi();
         mType = getResources().getStringArray(R.array.type);
         initUi();
-//        mainActivityPresenter.requestTopRatedMovieList();
+        mainActivityPresenter.requestTopRatedMovieList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mainActivityPresenter.stop();
     }
 
     private void initUi() {
-        typeList = new ArrayList<String>();
+        typeList = new ArrayList<>();
         String[] typeArray = getResources().getStringArray(R.array.type);
         for (int i = 0; i < typeArray.length; i++) {
             typeList.add(typeArray[i]);
         }
-        typeListAdapter = new TypeListAdapter(this, typeList);
-        mTypeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mTypeRecyclerView.setAdapter(typeListAdapter);
     }
 
     public void initializeDependencyInjector() {
         ((MovieReccoApplication) getApplication()).
                 getComponent().
                 inject(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -108,31 +108,66 @@ public class MainActivity extends Activity implements IMainActivityView {
     @Override
     public void initializeGenreList(ArrGenre arrGenre) {
         mArrGenre = arrGenre;
-        mGenreRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        genreDetailsListAdapter = new GenreDetailsListAdapter(this, mArrGenre.getGenres());
-        mGenreRecyclerView.setAdapter(genreDetailsListAdapter);
     }
 
     public void setGenreItemClicked(Genre genre) {
         mGenreSelected.setText(genre.getName());
-        mGenreRecyclerView.setVisibility(View.GONE);
 
     }
 
     public void setTypeItemClicked(String s) {
-        mTypeSelected.setText(s);
-        mTypeRecyclerView.setVisibility(View.GONE);
     }
 
-    @OnClick (R.id.type_ll)
-    public void openTypeList() {
-        mGenreRecyclerView.setVisibility(View.GONE);
-        mTypeRecyclerView.setVisibility(View.VISIBLE);
-    }
 
     @OnClick (R.id.genre_ll)
     public void openGenreList() {
-        mTypeRecyclerView.setVisibility(View.GONE);
-        mGenreRecyclerView.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, GenreListActivity.class);
+        intent.putExtra(GenreListActivity.INTENT_GENRE_LIST, mArrGenre);
+        startActivityForResult(intent, GENRE_LIST_REQUEST_CODE);
+    }
+
+
+    @OnClick (R.id.movie_collage)
+    public void animateImage() {
+        final Animation animation = AnimationUtils.loadAnimation(this,R.anim.shake);
+        mMainImage.startAnimation(animation);
+    }
+
+    @OnClick (R.id.button_movie)
+    public void setMovieSelected() {
+        isMovieSelected = true;
+        mMovieButton.setChecked(true);
+        mTvSeriesButton.setChecked(false);
+    }
+
+    @OnClick (R.id.button_tv_series)
+    public void setTvSeriesSelected() {
+        isMovieSelected = false;
+        mMovieButton.setChecked(false);
+        mTvSeriesButton.setChecked(true);
+    }
+    @OnClick (R.id.submit_button)
+    public void submitGenresForDiscover() {
+        Intent intent = new Intent(this, MovieListActivity.class);
+        intent.putExtra(MovieListActivity.INTENT_GENRES_STRING, genreIds);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == GENRE_LIST_REQUEST_CODE && data != null){
+            genreIds = data.getExtras().getString(GenreListActivity.INTENT_GENRE_IDS);
+            mSubmitButton.setVisibility(View.VISIBLE);
+            Toast.makeText(this, genreIds, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

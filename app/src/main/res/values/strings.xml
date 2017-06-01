@@ -47,5 +47,6 @@
     </string-array>
 
     <string name="description_query">No need to go anywhere. Just put in your preferences and we will help you find your flix</string>
+    <string name="proceed_text">Proceed</string>
 
 </resources>

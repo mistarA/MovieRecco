@@ -3,6 +3,7 @@ package com.project.di.components;
 import com.project.di.modules.ApplicationModule;
 import com.project.di.modules.NetModule;
 import com.project.movierecco.MainActivity;
+import com.project.movierecco.views.activity.MovieListActivity;
 
 import javax.inject.Singleton;
 
@@ -17,4 +18,6 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(MainActivity mainActivity);
+
+    void inject(MovieListActivity movieListActivity);
 }

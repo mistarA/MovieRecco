@@ -19,6 +19,7 @@ import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by anandmishra on 15/11/16.
@@ -41,23 +42,10 @@ public class MainActivityPresenter extends Presenter {
         this.mainActivityView = mainActivityView;
     }
 
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void stop() {
-
-    }
 
     public void requestTopRatedMovieList() {
 
-        if (mSharedPreferencesManager != null ){
-            Log.d("Dagger2","PrefsManager is not null");
-        }
-
-        movieDbApiInterface.getMoviesList(Constants.API_KEY)
+        compositeSubscription.add(movieDbApiInterface.getMoviesList(Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MovieResultsTopRated>() {
@@ -75,12 +63,13 @@ public class MainActivityPresenter extends Presenter {
                     public void onNext(MovieResultsTopRated movieResultsTopRated) {
                         mainActivityView.showMessage(movieResultsTopRated.getResults().get(4).getTitle());
                     }
-                });
+                })
+        );
     }
 
     public void getGenreListAndInflateDataToUi(){
 
-        movieDbApiInterface.getGenreList(Constants.API_KEY,Constants.LANGUAGE)
+        compositeSubscription.add(movieDbApiInterface.getGenreList(Constants.API_KEY,Constants.LANGUAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ArrGenre>() {
@@ -99,6 +88,7 @@ public class MainActivityPresenter extends Presenter {
                     public void onNext(ArrGenre arrGenre) {
                         mainActivityView.initializeGenreList(arrGenre);
                     }
-                });
+                })
+        );
     }
 }

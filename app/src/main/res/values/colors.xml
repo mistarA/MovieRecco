@@ -19,6 +19,10 @@
     <color name="blue.primary">#333545</color>
     <color name="blue.dark">#22242e</color>
 
+    <!--Movie Listing -->
+    <color name="toolbar_discover_background">#333548</color>
+    <color name="my_library_music_unselected_background">#474857</color>
+    <color name="my_library_music_selected_background">#FD3259</color>
 
     <color name="white_tranparent">#80FFFFFF</color>
     <color name="darkblack.tranparent">#E6000000</color>
@@ -170,9 +174,7 @@
     <color name="gray.background">#E9EAED</color>
 
 
-
-
-
+    <color name="blue_genre_selected">#385889</color>
 
 
 </resources>
