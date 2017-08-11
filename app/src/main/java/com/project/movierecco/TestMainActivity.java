@@ -137,6 +137,7 @@ public class TestMainActivity extends AppCompatActivity implements IMainActivity
 
     }
 
+
     @OnClick (R.id.service_method_button)
     public void callServiceMethod() {
         mBoundService.startBackgroundThread();
@@ -154,7 +155,8 @@ public class TestMainActivity extends AppCompatActivity implements IMainActivity
         Intent intent = new Intent(this, ExampleService.class);
         intent.putExtra(ExampleService.RECEIVER_TAG,myResultReceiver);
         intent.putExtra("Operation", ExampleService.PERFORM_SLEEP);
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        startService(intent);
+        //bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     ServiceConnection mServiceConnection = new ServiceConnection() {

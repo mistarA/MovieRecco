@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/room_activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:id="@+id/room_get_data"
+        android:background="@color/red.dark"
+        android:gravity="center"
+        android:text="Load Data"
+        android:textColor="@color/white"
+        android:textSize="16dp"/>
+
+
+</LinearLayout>

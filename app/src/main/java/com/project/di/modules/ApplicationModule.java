@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 import com.project.di.components.ApplicationComponent;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import com.project.*;
 

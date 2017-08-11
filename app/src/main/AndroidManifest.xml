@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.project.movierecco">
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -11,11 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name="com.project.services.ExampleService"
+        <service
+            android:name="com.project.services.ExampleService"
             android:exported="false"/>
 
-        <service android:name="com.project.services.ExampleIntentService"
-                 android:exported="false"/>
+        <service
+            android:name="com.project.services.ExampleIntentService"
+            android:exported="false"
+            android:stopWithTask="false"/>
 
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -27,14 +31,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.activity.GenreListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/FindMovieByQueryTheme"/>
+        <activity
+            android:name=".views.activity.GenreListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FindMovieByQueryTheme"/>
 
-        <activity android:name=".views.activity.MovieListActivity"
-                  android:screenOrientation="portrait"
-            android:theme="@style/MovieListTheme"
-            android:label="Movie List"/>
+        <activity
+            android:name=".views.activity.MovieListActivity"
+            android:label="Movie List"
+            android:screenOrientation="portrait"
+            android:theme="@style/MovieListTheme"/>
 
     </application>
 

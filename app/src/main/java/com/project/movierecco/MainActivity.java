@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         mainActivityPresenter.getGenreListAndInflateDataToUi();
         mType = getResources().getStringArray(R.array.type);
         initUi();
-        mainActivityPresenter.requestTopRatedMovieList();
+        //mainActivityPresenter.requestTopRatedMovieList();
     }
 
     @Override
@@ -119,12 +119,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         startActivityForResult(intent, GENRE_LIST_REQUEST_CODE);
     }
 
-
-    @OnClick (R.id.movie_collage)
-    public void animateImage() {
-        final Animation animation = AnimationUtils.loadAnimation(this,R.anim.shake);
-        mMainImage.startAnimation(animation);
-    }
 
     @OnClick (R.id.button_movie)
     public void setMovieSelected() {

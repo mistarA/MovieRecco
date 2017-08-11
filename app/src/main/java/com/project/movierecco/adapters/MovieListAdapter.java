@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.project.models.Genre;
@@ -65,7 +66,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     public class MovieItemViewHolder extends RecyclerView.ViewHolder  {
 
         @BindView(R.id.movie_poster)
-        AspectRatioImageView mPoster;
+        ImageView mPoster;
 
         @BindView (R.id.item_name)
         TextView mItemName;

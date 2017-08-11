@@ -10,6 +10,7 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Named;
+import javax.inject.Qualifier;
 import javax.inject.Singleton;
 
 import dagger.Module;

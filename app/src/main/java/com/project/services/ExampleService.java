@@ -49,10 +49,10 @@ public class ExampleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getExtras() != null){
+        if (intent != null && intent.getExtras() != null) {
             resultReceiver = intent.getParcelableExtra(RECEIVER_TAG);
             String operation = intent.getExtras().getString("Operation");
-            if (operation != null && operation.equals(PERFORM_SLEEP)){
+            if (operation != null && operation.equals(PERFORM_SLEEP)) {
                 Thread thread = new Thread(runnable);
                 thread.start();
             }
@@ -70,14 +70,15 @@ public class ExampleService extends Service {
                 Bundle bundle = new Bundle();
                 bundle.putString("Message", "I came from ExampleService");
                 msg.setData(bundle);
-                mHandler.sendMessage(msg);            }
+                mHandler.sendMessage(msg);
+            }
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     };
 
-    Handler mHandler = new Handler(){
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Intent broadcastIntent = new Intent();
@@ -95,8 +96,8 @@ public class ExampleService extends Service {
         thread.start();
     }
 
-    public class LocalBinder extends Binder{
-        public ExampleService getService(){
+    public class LocalBinder extends Binder {
+        public ExampleService getService() {
             return ExampleService.this;
         }
     }
