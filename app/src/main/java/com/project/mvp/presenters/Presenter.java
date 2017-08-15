@@ -2,7 +2,6 @@ package com.project.mvp.presenters;
 
 import com.project.utils.RxUtils;
 
-import rx.internal.util.RxJavaPluginUtils;
 import rx.subscriptions.CompositeSubscription;
 
 /**

@@ -16,9 +16,6 @@ import com.project.room.viewmodels.MovieListViewModel;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.OnClick;
-
 /**
  * Created by anandmishra on 11/08/17.
  */

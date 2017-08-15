@@ -1,8 +1,6 @@
 package com.project.services;
 
-import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
@@ -10,12 +8,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.ResultReceiver;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.widget.Toast;
 
-import com.project.movierecco.MainActivity;
 import com.project.movierecco.TestMainActivity;
 
 /**

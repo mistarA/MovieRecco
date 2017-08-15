@@ -1,7 +1,6 @@
 package com.project.room.utils;
 
 import android.arch.persistence.room.TypeConverter;
-import android.arch.persistence.room.TypeConverters;
 
 import java.util.Date;
 

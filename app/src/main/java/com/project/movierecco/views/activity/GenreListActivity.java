@@ -8,14 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Window;
 
 import com.project.models.ArrGenre;
-import com.project.models.Genre;
-import com.project.movierecco.MainActivity;
 import com.project.movierecco.R;
 import com.project.movierecco.adapters.GenreDetailsListAdapter;
 import com.project.utils.GridSpacingItemDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

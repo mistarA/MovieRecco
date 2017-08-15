@@ -4,7 +4,6 @@ import android.os.NetworkOnMainThreadException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;

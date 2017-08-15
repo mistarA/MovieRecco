@@ -1,25 +1,17 @@
 package com.project.mvp.presenters;
 
-import android.util.Log;
-
 import com.project.models.ArrGenre;
 import com.project.models.MovieResultsTopRated;
 import com.project.mvp.views.IMainActivityView;
 import com.project.network.views.MovieDbApiInterface;
 import com.project.utils.Constants;
 import com.project.utils.storage.SharedPreferencesManager;
+
 import javax.inject.Inject;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
-import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by anandmishra on 15/11/16.

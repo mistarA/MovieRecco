@@ -5,11 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.project.di.components.ApplicationComponent;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
-import com.project.*;
 
 import dagger.Module;
 import dagger.Provides;

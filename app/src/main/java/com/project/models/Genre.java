@@ -7,10 +7,10 @@ package com.project.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import javax.annotation.Generated;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import javax.annotation.Generated;
 
 @Generated ("org.jsonschema2pojo")
 public class Genre implements Parcelable {

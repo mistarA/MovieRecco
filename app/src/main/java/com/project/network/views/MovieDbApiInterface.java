@@ -4,8 +4,6 @@ import com.project.models.ArrGenre;
 import com.project.models.MovieResultsDiscover;
 import com.project.models.MovieResultsTopRated;
 
-
-import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;

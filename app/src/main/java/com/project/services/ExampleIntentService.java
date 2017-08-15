@@ -1,6 +1,5 @@
 package com.project.services;
 
-import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 
-import com.project.movierecco.MainActivity;
 import com.project.movierecco.TestMainActivity;
 
 import static com.project.services.ExampleService.RESULT_ACTION;

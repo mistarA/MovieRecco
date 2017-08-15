@@ -13,7 +13,6 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.project.models.Genre;
-import com.project.movierecco.MainActivity;
 import com.project.movierecco.R;
 import com.project.movierecco.adapters.GenreDetailsListAdapter;
 

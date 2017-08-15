@@ -1,7 +1,6 @@
 package com.project.movierecco.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.project.models.Genre;
-import com.project.models.MovieResultsDiscover;
 import com.project.models.Result;
 import com.project.movierecco.R;
-import com.project.utils.AspectRatioImageView;
 import com.project.utils.Constants;
 import com.project.utils.GenreIdMapper;
 import com.squareup.picasso.Picasso;
@@ -51,11 +47,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.mItemName.setText(result.getOriginalTitle());
         holder.mItemGenre.setText(GenreIdMapper.getGenreNamesFromIds(result.getGenreIds()));
         holder.mItemRating.setText(result.getVoteAverage().toString());
-        Picasso.with(context)
-                .load(Constants.imageBseUrl.concat(result.getPosterPath()))
-                .placeholder(R.drawable.moviecollage)
-                .fit()
-                .into(holder.mPoster);
+        if (result.getPosterPath() != null) {
+            Picasso.with(context)
+                    .load(Constants.imageBseUrl.concat(result.getPosterPath()))
+                    .placeholder(R.drawable.moviecollage)
+                    .fit()
+                    .into(holder.mPoster);
+        }
     }
 
     @Override
@@ -63,9 +61,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return mMovieResultsDiscovers != null ? mMovieResultsDiscovers.size() : 0;
     }
 
-    public class MovieItemViewHolder extends RecyclerView.ViewHolder  {
+    public class MovieItemViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.movie_poster)
+        @BindView (R.id.movie_poster)
         ImageView mPoster;
 
         @BindView (R.id.item_name)
@@ -83,8 +81,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
     }
 
-    public void addAllItems(List<Result> movieResultsDiscovers){
-        mMovieResultsDiscovers.clear();
+    public void addAllItems(List<Result> movieResultsDiscovers) {
         mMovieResultsDiscovers.addAll(movieResultsDiscovers);
         notifyDataSetChanged();
     }
