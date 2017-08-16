@@ -12,6 +12,7 @@ import com.project.models.Result;
 import com.project.movierecco.R;
 import com.project.utils.Constants;
 import com.project.utils.GenreIdMapper;
+import com.project.utils.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         if (result.getPosterPath() != null) {
             Picasso.with(context)
                     .load(Constants.imageBseUrl.concat(result.getPosterPath()))
+                    .transform(new RoundedTransformation(50,4))
                     .placeholder(R.drawable.moviecollage)
                     .fit()
                     .into(holder.mPoster);
