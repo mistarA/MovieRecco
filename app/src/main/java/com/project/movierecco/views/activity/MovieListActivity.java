@@ -6,16 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.project.models.MovieResultsDiscover;
+import com.project.models.Result;
 import com.project.movierecco.MovieReccoApplication;
 import com.project.movierecco.R;
 import com.project.movierecco.adapters.MovieListAdapter;
 import com.project.mvp.presenters.MovieListPresenter;
 import com.project.mvp.views.IMovieListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,6 +43,13 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     @BindView (R.id.movie_list_toolbar)
     Toolbar mToolbar;
 
+    @BindView (R.id.search_movie_et)
+    EditText mSearchEditText;
+
+    @BindView (R.id.search_lin_layout)
+    LinearLayout mSearchLinearLayout;
+
+
     @BindView (R.id.load_more_progress_bar)
     ProgressBar mProgressLoadMoreItems;
 
@@ -42,6 +57,10 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     private String type;
     private int pageNumber = 0;
     private MovieListAdapter movieListAdapter;
+
+    private List<Result> mOriginalList;
+    private List<Result> mFilteredList;
+
 
     public static final String INTENT_GENRES_STRING = "INTENT_GENRES_STRING";
     public static final String INTENT_DISCOVER_TYPE = "INTENT_DISCOVER_TYPE";
@@ -52,6 +71,7 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     private int mTotalPages;
     private int mTotalResults;
     boolean isLoaderVisible;
+    private boolean isSearchGoingOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +89,6 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
 
         initUi();
 
-        //ToDo Pagination - Second Parameter
         loadMoreItems();
 
         mMovieListRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -88,7 +107,7 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
                 int totalItemCount = linearLayoutManager.getItemCount();
 
                 if (((firstVisibleItem + totalVisibleItems) >= totalItemCount)
-                        && !isLoaderVisible && firstVisibleItem >= 0 && totalItemCount <= mTotalResults && pageNumber <= mTotalPages) {
+                        && !isSearchGoingOn && !isLoaderVisible && firstVisibleItem >= 0 && totalItemCount <= mTotalResults && pageNumber <= mTotalPages) {
                     loadMoreItems();
                 }
 
@@ -113,12 +132,29 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     }
 
     private void initUi() {
+        mOriginalList = new ArrayList<>();
+        mFilteredList = new ArrayList<>();
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Move List");
-        movieListAdapter = new MovieListAdapter(this);
+        getSupportActionBar().setTitle(getResources().getString(R.string.movie_list_text));
+        movieListAdapter = new MovieListAdapter(this, mFilteredList);
         mMovieListRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mMovieListRv.setAdapter(movieListAdapter);
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterData(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
     }
 
@@ -134,10 +170,32 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
 
     @Override
     public void addDiscoverMovieLists(MovieResultsDiscover movieResultsDiscover) {
+        if (mSearchLinearLayout.getVisibility() == View.GONE) {
+            mSearchLinearLayout.setVisibility(View.VISIBLE);
+        }
         mProgressLoadMoreItems.setVisibility(View.GONE);
         isLoaderVisible = false;
         mTotalPages = movieResultsDiscover.getTotalPages();
         mTotalResults = movieResultsDiscover.getTotalResults();
-        movieListAdapter.addAllItems(movieResultsDiscover.getResults());
+        mOriginalList.addAll(movieResultsDiscover.getResults());
+        mFilteredList.addAll(movieResultsDiscover.getResults());
+        movieListAdapter.notifyDataSetChanged();
+    }
+
+    public void filterData(String query) {
+        mFilteredList.clear();
+        if (query.length() != 0) {
+            isSearchGoingOn = true;
+            for (Result result : mOriginalList) {
+                if (result.getOriginalTitle().toLowerCase().startsWith(query.toLowerCase())) {
+                    mFilteredList.add(result);
+                }
+            }
+        }
+        else {
+            isSearchGoingOn = false;
+            mFilteredList.addAll(mOriginalList);
+        }
+        movieListAdapter.notifyDataSetChanged();
     }
 }

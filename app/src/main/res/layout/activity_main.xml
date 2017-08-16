@@ -76,7 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/type_ll"
-            android:background="@color/find_movie_dark_green"
+            android:layout_marginTop="20dp"
+            android:background="@color/lightning_yellow"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -86,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/select_genre"
-                android:textColor="@color/gray.black"
+                android:textColor="@color/blue_genre_selected"
                 android:textSize="15dp"/>
 
 
@@ -94,7 +95,7 @@
 
         <Button
             android:layout_width="100dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:id="@+id/submit_button"
             android:layout_gravity="center"
@@ -102,7 +103,7 @@
             android:text="Submit"
             android:textSize="12dp"
             android:background="@color/red.dark"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="40dp"
             android:visibility="gone"/>
 
         <ImageView

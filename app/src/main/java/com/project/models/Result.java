@@ -17,6 +17,7 @@ public class Result {
 
     @SerializedName ("poster_path")
     @Expose
+
     private String posterPath;
     @SerializedName ("adult")
     @Expose
@@ -57,6 +58,29 @@ public class Result {
     @SerializedName ("vote_average")
     @Expose
     private Double voteAverage;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Result result = (Result) o;
+
+        if (!id.equals(result.id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 
     /**
      * @return The posterPath

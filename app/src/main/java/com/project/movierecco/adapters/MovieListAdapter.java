@@ -29,8 +29,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private Context context;
     private List<Result> mMovieResultsDiscovers;
 
-    public MovieListAdapter(Context context) {
+    public MovieListAdapter(Context context, List<Result> mResultsList) {
         mMovieResultsDiscovers = new ArrayList<>();
+        this.mMovieResultsDiscovers = mResultsList;
         this.context = context;
     }
 
