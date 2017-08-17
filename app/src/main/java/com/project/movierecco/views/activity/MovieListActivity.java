@@ -2,12 +2,15 @@ package com.project.movierecco.views.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import com.project.movierecco.adapters.MovieListAdapter;
 import com.project.mvp.presenters.MovieListPresenter;
 import com.project.mvp.views.IMovieListView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +59,10 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
 
     private String genres;
     private String type;
+    private static String IS_FILTERING_DONE;
     private int pageNumber = 0;
     private MovieListAdapter movieListAdapter;
+    private Handler mHandler;
 
     private List<Result> mOriginalList;
     private List<Result> mFilteredList;
@@ -134,6 +140,16 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     private void initUi() {
         mOriginalList = new ArrayList<>();
         mFilteredList = new ArrayList<>();
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.getData().getBoolean(IS_FILTERING_DONE)) {
+                    movieListAdapter.notifyDataSetChanged();
+                    Log.d("Thread MovieRecco", "RV  Updated");
+                }
+                return true;
+            }
+        });
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.movie_list_text));
@@ -182,20 +198,42 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
         movieListAdapter.notifyDataSetChanged();
     }
 
-    public void filterData(String query) {
-        mFilteredList.clear();
-        if (query.length() != 0) {
-            isSearchGoingOn = true;
-            for (Result result : mOriginalList) {
-                if (result.getOriginalTitle().toLowerCase().startsWith(query.toLowerCase())) {
-                    mFilteredList.add(result);
+    public void filterData(final String query) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Thread MovieRecco", "Background Running");
+                mFilteredList.clear();
+                if (query.length() != 0) {
+                    isSearchGoingOn = true;
+                    for (Result result : mOriginalList) {
+                        if (result.getOriginalTitle().toLowerCase().startsWith(query.toLowerCase())) {
+                            mFilteredList.add(result);
+                        }
+                    }
                 }
+                else {
+                    isSearchGoingOn = false;
+                    mFilteredList.addAll(mOriginalList);
+                }
+                mHandler.obtainMessage();
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(IS_FILTERING_DONE, true);
+                message.setData(bundle);
+                mHandler.sendEmptyMessage(0);
             }
-        }
-        else {
-            isSearchGoingOn = false;
-            mFilteredList.addAll(mOriginalList);
-        }
+
+        });
+        thread.start();
+        Log.d("Thread MovieRecco", "Main Thread");
         movieListAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler = null;
+    }
+
 }
