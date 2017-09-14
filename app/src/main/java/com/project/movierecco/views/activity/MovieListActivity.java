@@ -1,6 +1,7 @@
 package com.project.movierecco.views.activity;
 
 import android.content.Intent;
+import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,10 +14,18 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.OneoffTask;
+import com.google.android.gms.gcm.Task;
 import com.project.models.MovieResultsDiscover;
 import com.project.models.Result;
 import com.project.movierecco.MovieReccoApplication;
@@ -24,6 +33,7 @@ import com.project.movierecco.R;
 import com.project.movierecco.adapters.MovieListAdapter;
 import com.project.mvp.presenters.MovieListPresenter;
 import com.project.mvp.views.IMovieListView;
+import com.project.services.TaskSchedulerService;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -63,6 +73,8 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
     private int pageNumber = 0;
     private MovieListAdapter movieListAdapter;
     private Handler mHandler;
+
+    private GcmNetworkManager gcmNetworkManager;
 
     private List<Result> mOriginalList;
     private List<Result> mFilteredList;
@@ -119,6 +131,22 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
 
             }
         });
+
+        //Just Random Stuff
+        gcmNetworkManager = GcmNetworkManager.getInstance(this);
+
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+            Task task = new OneoffTask.Builder()
+                    .setService(TaskSchedulerService.class)
+                    .setTag(TaskSchedulerService.ONE_OFF_TASK)
+                    .setRequiredNetwork(Task.NETWORK_STATE_UNMETERED)
+                    .setPersisted(true)
+                    .setExecutionWindow(0, 5)
+                    .build();
+
+            gcmNetworkManager.schedule(task);
+            Toast.makeText(this, "Task Scheduled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadMoreItems() {
@@ -207,7 +235,7 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
                 if (query.length() != 0) {
                     isSearchGoingOn = true;
                     for (Result result : mOriginalList) {
-                        if (result.getOriginalTitle().toLowerCase().startsWith(query.toLowerCase())) {
+                        if (result.getOriginalTitle().toLowerCase().contains(query.toLowerCase())) {
                             mFilteredList.add(result);
                         }
                     }

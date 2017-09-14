@@ -3,7 +3,10 @@
           package="com.project.movierecco">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
+    <uses-feature android:name="android.hardware.Camera"/>
     <application
         android:name="MovieReccoApplication"
         android:allowBackup="true"
@@ -17,11 +20,28 @@
             android:exported="false"/>
 
         <service
+            android:name="com.project.services.TaskSchedulerService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
+            </intent-filter>
+        </service>
+
+
+        <service
             android:name="com.project.services.ExampleIntentService"
             android:exported="false"
             android:stopWithTask="false"/>
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".views.activity.GenreListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FindMovieByQueryTheme">
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FindMovieByQueryTheme">
             <intent-filter>
@@ -31,10 +51,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".views.activity.GenreListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/FindMovieByQueryTheme"/>
 
         <activity
             android:name=".views.activity.MovieListActivity"
