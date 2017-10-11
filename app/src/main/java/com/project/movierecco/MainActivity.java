@@ -29,6 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static butterknife.ButterKnife.findById;
+
 public class MainActivity extends AppCompatActivity implements IMainActivityView {
 
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
     @BindView(R.id.submit_button)
     Button mSubmitButton;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         mainActivityPresenter.getGenreListAndInflateDataToUi();
         mType = getResources().getStringArray(R.array.type);
         initUi();
+
         //mainActivityPresenter.requestTopRatedMovieList();
     }
 

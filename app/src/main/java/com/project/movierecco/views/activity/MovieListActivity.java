@@ -1,7 +1,8 @@
 package com.project.movierecco.views.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +15,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.OneoffTask;
 import com.google.android.gms.gcm.Task;
@@ -33,16 +32,20 @@ import com.project.movierecco.R;
 import com.project.movierecco.adapters.MovieListAdapter;
 import com.project.mvp.presenters.MovieListPresenter;
 import com.project.mvp.views.IMovieListView;
+import com.project.services.ExampleService;
 import com.project.services.TaskSchedulerService;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by anandmishra on 31/05/17.
@@ -133,9 +136,9 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
         });
 
         //Just Random Stuff
-        gcmNetworkManager = GcmNetworkManager.getInstance(this);
+        //gcmNetworkManager = GcmNetworkManager.getInstance(this);
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+        /*if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             Task task = new OneoffTask.Builder()
                     .setService(TaskSchedulerService.class)
                     .setTag(TaskSchedulerService.ONE_OFF_TASK)
@@ -146,7 +149,12 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
 
             gcmNetworkManager.schedule(task);
             Toast.makeText(this, "Task Scheduled", Toast.LENGTH_SHORT).show();
-        }
+        }*/
+
+        /*AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent exampleAlarmService = new Intent(this, ExampleService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 111, exampleAlarmService, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);*/
     }
 
     private void loadMoreItems() {
@@ -257,11 +265,4 @@ public class MovieListActivity extends AppCompatActivity implements IMovieListVi
         Log.d("Thread MovieRecco", "Main Thread");
         movieListAdapter.notifyDataSetChanged();
     }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mHandler = null;
-    }
-
 }

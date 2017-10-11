@@ -10,7 +10,16 @@ import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.project.models.ArrGenre;
+import com.project.movierecco.MovieReccoApplication;
 import com.project.movierecco.TestMainActivity;
+import com.project.network.views.MovieDbApiInterface;
+import com.project.utils.Constants;
+import com.project.utils.storage.SharedPreferencesManager;
+
+import javax.inject.Inject;
+
+import rx.SingleSubscriber;
 
 /**
  * Created by anandmishra on 28/05/17.
@@ -25,6 +34,12 @@ public class ExampleService extends Service {
     public static final String RECEIVER_TAG = "RECEIVER_TAG";
     ResultReceiver resultReceiver;
     public IBinder localBinder = new LocalBinder();
+
+    @Inject
+    MovieDbApiInterface movieDbApiInterface;
+
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,14 +58,16 @@ public class ExampleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getExtras() != null) {
+       /* if (intent != null && intent.getExtras() != null) {
             resultReceiver = intent.getParcelableExtra(RECEIVER_TAG);
             String operation = intent.getExtras().getString("Operation");
             if (operation != null && operation.equals(PERFORM_SLEEP)) {
                 Thread thread = new Thread(runnable);
                 thread.start();
             }
-        }
+        }*/
+       initializeDependencyInjection();
+        callMovieDetailsPage();
         return START_STICKY;
     }
 
@@ -94,5 +111,25 @@ public class ExampleService extends Service {
         public ExampleService getService() {
             return ExampleService.this;
         }
+    }
+
+    private void initializeDependencyInjection() {
+        ((MovieReccoApplication) getApplication()).getComponent().inject(this);
+    }
+
+    private void callMovieDetailsPage() {
+        movieDbApiInterface.getSingleGenreList(Constants.API_KEY,Constants.LANGUAGE)
+                .subscribe(new SingleSubscriber<ArrGenre>() {
+                    @Override
+                    public void onSuccess(ArrGenre value) {
+                        sharedPreferencesManager.putString(value.getGenres().get(4).getName());
+                        stopSelf();
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                });
     }
 }

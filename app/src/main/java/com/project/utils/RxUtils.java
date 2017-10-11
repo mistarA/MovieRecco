@@ -11,11 +11,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * @author vardansharma
- *         <p>
- *         Utilities method for the usage of RX
- */
 public class RxUtils {
 
     public static final String RXUTILS = "RXUTILS";

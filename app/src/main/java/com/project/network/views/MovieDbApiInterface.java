@@ -8,6 +8,7 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by anandmishra on 12/11/16.
@@ -20,6 +21,9 @@ public interface MovieDbApiInterface {
 
     @GET("3/genre/movie/list")
     Observable<ArrGenre> getGenreList(@Query("api_key") String apiKey, @Query("language") String language);
+
+    @GET("3/genre/movie/list")
+    Single<ArrGenre> getSingleGenreList(@Query("api_key") String apiKey, @Query("language") String language);
 
     @GET("3/discover/{type}")
     Observable<MovieResultsDiscover> getMovieDiscoverList(@Path("type") String type,

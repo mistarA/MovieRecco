@@ -19,22 +19,22 @@ import dagger.Provides;
 public class ApplicationModule {
 
 
-  Application application;
+    Application application;
 
     public ApplicationModule(Application application) {
 
-        this.application=application;
+        this.application = application;
     }
 
     @Provides
     @Singleton
-    Context provideContext(){
+    Context provideContext() {
         return application;
     }
 
     @Provides
     @Singleton
-    SharedPreferences provideSharedPreferences(Context context){
+    SharedPreferences provideSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 

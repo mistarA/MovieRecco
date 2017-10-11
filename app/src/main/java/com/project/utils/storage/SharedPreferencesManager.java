@@ -10,14 +10,25 @@ import javax.inject.Inject;
 
 public class SharedPreferencesManager {
 
-    SharedPreferences sharedPreferences;
-
+    private SharedPreferences mSharedPreferences;
+    private final String TAG_FOR_TASK = "TAG_FOR_TASK";
 
     @Inject
-    SharedPreferencesManager(SharedPreferences sharedPreferences){
-
-        this.sharedPreferences = sharedPreferences;
+    SharedPreferencesManager(SharedPreferences mSharedPreferences){
+        this.mSharedPreferences = mSharedPreferences;
     }
 
+    public void putString(String value){
+          mSharedPreferences.edit()
+                  .putString(TAG_FOR_TASK, value)
+                  .apply();
+    }
 
+    public void getString(String key){
+        mSharedPreferences.getString(key,null);
+    }
+
+    public String getTagForTask(){
+        return mSharedPreferences.getString(TAG_FOR_TASK,null);
+    }
 }

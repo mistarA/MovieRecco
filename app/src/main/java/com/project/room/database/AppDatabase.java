@@ -12,7 +12,7 @@ import com.project.room.models.MovieModel;
  * Created by anandmishra on 11/08/17.
  */
 
-@Database(entities = MovieModel.class, version = 1)
+@Database(entities = MovieModel.class, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase{
 
     private static AppDatabase INSTANCE;

@@ -1,7 +1,9 @@
 package com.project.movierecco.adapters;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.SingleSubscriber;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by anandmishra on 13/05/16.
@@ -84,9 +92,38 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
     }
 
-    public void addAllItems(List<Result> movieResultsDiscovers) {
-        mMovieResultsDiscovers.addAll(movieResultsDiscovers);
-        notifyDataSetChanged();
+
+    public void updateItems(final List<Result> newData){
+
+        Log.d("DiffUtil", String.valueOf(newData.get(0)) + String.valueOf(newData.get(newData.size() - 1)));
+        Observable.fromCallable(new Callable<DiffUtil.DiffResult>() {
+            @Override
+            public DiffUtil.DiffResult call() throws Exception {
+                return getDiffResult(newData);
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Subscriber<DiffUtil.DiffResult>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(DiffUtil.DiffResult diffResult) {
+                diffResult.dispatchUpdatesTo(MovieListAdapter.this);
+            }
+        });
+
     }
 
+    public DiffUtil.DiffResult getDiffResult(List<Result> newData){
+        return DiffUtil.calculateDiff(new MovieListDiffUtil(mMovieResultsDiscovers, newData));
+    }
 }

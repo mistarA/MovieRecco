@@ -61,6 +61,7 @@ public class MainActivityPresenter extends Presenter {
 
     public void getGenreListAndInflateDataToUi(){
 
+        mainActivityView.showMessage("Genre Name Returned: " + mSharedPreferencesManager.getTagForTask());
         compositeSubscription.add(movieDbApiInterface.getGenreList(Constants.API_KEY,Constants.LANGUAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -1,17 +1,22 @@
 package com.project.movierecco;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.ResultReceiver;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
@@ -70,7 +75,8 @@ public class TestMainActivity extends AppCompatActivity implements IMainActivity
 
         isNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         isGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        myResultReceiver =  new MyResultReceiver(new Handler());
+        myResultReceiver = new MyResultReceiver(new Handler());
+
     }
 
     @Override
@@ -95,7 +101,7 @@ public class TestMainActivity extends AppCompatActivity implements IMainActivity
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MyBroadcastReceiver.ACTION_RECEIVE_DATA);
         intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(myBroadcastReceiver, intentFilter);
+        //LocalBroadcastManager.getInstance(this).registerReceiver(myBroadcastReceiver, intentFilter);
     }
 
     @Override
