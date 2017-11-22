@@ -1,7 +1,15 @@
 package com.project.movierecco;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +25,7 @@ import com.project.movierecco.views.activity.GenreListActivity;
 import com.project.movierecco.views.activity.MovieListActivity;
 import com.project.mvp.presenters.MainActivityPresenter;
 import com.project.mvp.views.IMainActivityView;
+import com.project.services.ExampleMessengerService;
 import com.project.utils.Constants;
 import com.project.utils.storage.SharedPreferencesManager;
 
@@ -79,8 +88,35 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
         mType = getResources().getStringArray(R.array.type);
         initUi();
 
+        //Intent intent = new Intent(this, ExampleMessengerService.class);
+        //startService(intent);
+        //bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
         //mainActivityPresenter.requestTopRatedMovieList();
     }
+
+    Messenger messenger;
+    ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            messenger = new Messenger(service);
+            Message message= Message.obtain(null, ExampleMessengerService.SAY_HELLO, 0, 0);
+
+            message.replyTo = new Messenger(new ResponseHandler());
+
+            try {
+                messenger.send(message);
+            }
+            catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Toast.makeText(MainActivity.this, "Service Disconnected", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onDestroy() {
@@ -160,5 +196,13 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
             mSubmitButton.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    class ResponseHandler extends Handler{
+
+        @Override
+        public void handleMessage(Message msg) {
+            Toast.makeText(MainActivity.this, "HelloClient", Toast.LENGTH_SHORT).show();
+        }
     }
 }

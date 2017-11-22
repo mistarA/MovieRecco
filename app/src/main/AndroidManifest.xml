@@ -32,6 +32,12 @@
             android:exported="false"
             android:stopWithTask="false"/>
 
+        <service android:name="com.project.services.ExampleMessengerService"
+            android:exported="false"
+            android:stopWithTask="false">
+
+        </service>
+
         <activity
             android:name=".views.activity.GenreListActivity"
             android:screenOrientation="portrait"
@@ -58,6 +64,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
 
         <service android:name="com.project.firebase.CustomFireBaseMessagingService"
                  android:enabled="true"

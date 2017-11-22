@@ -24,6 +24,7 @@ public class GenreListActivity extends AppCompatActivity {
 
     public static final String INTENT_GENRE_LIST = "INTENT_GENRE_LIST";
     public static final String INTENT_GENRE_IDS = "INTENT_GENRE_IDS";
+    public static GenreListActivity instance;
 
     ArrGenre mArrGenre;
     private GenreDetailsListAdapter genreDetailsListAdapter;
@@ -38,6 +39,7 @@ public class GenreListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_genre_list);
         ButterKnife.bind(this);
 
+        instance = this;
         if (getIntent().getExtras() != null){
             Bundle bundle =  getIntent().getExtras();
             mArrGenre =   bundle.getParcelable(INTENT_GENRE_LIST);
